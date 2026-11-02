@@ -416,3 +416,9 @@ public ResponseEntity<Void> delete(@PathVariable Long id) {
 }
 ```
 기존 ResponseStatus 를 통해 상태 코드를 전송했다면 이번엔 다른 방식으로 표현 한다는 점에서 의의가 있다.
+
+
+AI usage
+- 코드 이해를 위한 주석 - 교수님 기본 코드 베이스
+- 기본적인 수정 사항 찾기
+- readme에서 관련 자료 table로 표현하기
