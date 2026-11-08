@@ -9,382 +9,66 @@ crud 기능 수행
 ### 주요 기능
 데이터 추가, 삭제, 수정, 조회 기능
 
-이때 조회는 감독이름, 감독이름과 특정 평점 이상, 그리고 특정 감독의 영화를 평점 내림차순으로 볼 수 있다.
+이때 조회는 감독이름, 감독이름과 특정 평점 초과, 그리고 특정 감독의 영화를 평점 내림차순으로 볼 수 있다.
 
 - **GitHub Repository:** :
 - **Render Deployment URL:** 
 
 ---
 
-## 2. Database SQL Practice
+## 2. 주요 구현 내용 및 결과
+### Query Method 
+![Query Method 감독 이름으로 찾기.png](captures/Query%20Method%20%EA%B0%90%EB%8F%85%20%EC%9D%B4%EB%A6%84%EC%9C%BC%EB%A1%9C%20%EC%B0%BE%EA%B8%B0.png)
 
-### 기존 Table 조회 및 데이터 추가
+![Query Method 감독 이름 평점 이상인 영화.png](captures/Query%20Method%20%EA%B0%90%EB%8F%85%20%EC%9D%B4%EB%A6%84%20%ED%8F%89%EC%A0%90%20%EC%9D%B4%EC%83%81%EC%9D%B8%20%EC%98%81%ED%99%94.png)
 
-movie_sql:
+![Query Method 감독 이름 평점 순으로.png](captures/Query%20Method%20%EA%B0%90%EB%8F%85%20%EC%9D%B4%EB%A6%84%20%ED%8F%89%EC%A0%90%20%EC%88%9C%EC%9C%BC%EB%A1%9C.png)
 
-```text
-CREATE TABLE movie_sql (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    director VARCHAR(100),
-    genre VARCHAR(50),
-    rating DOUBLE
-);
+### Dirty Checking
+![dirty checking.png](captures/dirty%20checking.png)
 
-INSERT INTO movie_sql(title, director, genre, rating)
-VALUES
-    ('Inception', 'Nolan', 'SF', 9.1),
-    ('Interstellar', 'Nolan', 'SF', 9.3),
-    ('Parasite', 'Bong', 'Drama', 9.0);
+### Auditing
+![dirty checking and Auditing in db.png](captures/dirty%20checking%20and%20Auditing%20in%20db.png)
 
+## 3. Weekly Review
+### Key Learning: 새롭게 배운 내용 2~3가지
+1. transaction과 dirty checking의 관계
+`@transactional`이 붙은 메서드 전체에서 transaction이 반영되어 findById 를 통해 진행된 영속 상태가 메서드가 끝날때까지 유지 된다.
 
-SELECT * FROM movie_sql;
+이때 id를 통해 받은 데이터를 새로 입력 받은 데이터로 수정하게 될 경우 영속 상태에서는 dirty checking이 진행되면 jpa가 데이터 수정을 추적하게 된다.
 
-UPDATE movie_sql
-SET rating = 9.5
-WHERE title = 'Interstellar';
+그렇기에 나중에 save를 진행하지 않아도 자동으로 update sql 문이 진행되며 데이터가 수정된다.
 
-SELECT * FROM movie_sql;
+2. query method 작성 방법
+findBy + 필드명 + 조건 을 통해 query method 작성이 가능하다.
 
-DELETE FROM movie_sql
-WHERE title = 'Parasite';
+이를 통해 특정 기능을 수행하는 sql 문을 직접 작성하지 않아도 원하는 조건으로 java 메서드 형태로 사용할 수 있다. 
 
-SELECT * FROM movie_sql;
+이때 repository에 추가한 method를 작성할 필요가 있다.
 
-SELECT title, rating FROM movie_sql;
+3. Auditing
+엔티티가 언제 생성 되었는지 수정된 시기를 자동으로 저장하는 기능
 
-SELECT * FROM movie_sql WHERE genre = 'SF';
-```
+@CreatedDate 과 @LastModifiedDate 를 통해 관리
 
-**실행 결과**
+application class 에서 `@EnableJpaAuditing`를 선언해주어야 하낟.
 
-## Database SQL Practice
+### Problem & Solution: 어려웠던 점과 해결 방법
 
-- 기존
-![ExistingTable.png](captures/ExistingTable.png)
+어려웠던 점 : @transactional 과 dirty checking 의 관계 및 수정이 어떻게 진행되는지 이해가 어려웠다.
 
-![existingValue.png](captures/existingValue.png)
+해결 방법 : ta세션과 ai 통해 공부
 
-### 새로운 Table 조회 및 데이터 추가
+### Reflection: 이번 과제를 통해 느낀 점
+이번 과제를 하면서 이론으로 @transactional과 update, dirty checking 이 어떻게 이루어 지는지 배운 것이 실제 적용으로 어떻게 작성이 되는지를 알 수 있었다.
 
-```text
-CREATE TABLE movie_sql (
-    id BIGINT AUTO_INCREMENT PRIMARY KEY,
-    title VARCHAR(100) NOT NULL,
-    director VARCHAR(100),
-    genre VARCHAR(50),
-    rating DOUBLE
-);
+### ④ AI Usage
+사용한 생성형 AI 도구 및 주요 질문
+- 해당 코드에서 오류가 있는지
+- dirty checking 이 어떻게 이루어 지며 @transactional과 어떤 관계인지
 
-INSERT INTO movie_sql(title, director, genre, rating)
-VALUES
-    ('Inception', 'Nolan', 'SF', 9.1),
-    ('Interstellar', 'Nolan', 'SF', 9.3),
-    ('Parasite', 'Bong', 'Drama', 9.0);
+AI가 제공한 내용 중 직접 수정하거나 검증한 부분
+- dirty checking 의 이해한 내용을 ta 님에게 물어보고 확인
 
-
-SELECT * FROM movie_sql;
-
-UPDATE movie_sql
-SET rating = 9.5
-WHERE title = 'Interstellar';
-
-SELECT * FROM movie_sql;
-
-DELETE FROM movie_sql
-WHERE title = 'Parasite';
-
-SELECT * FROM movie_sql;
-
-SELECT title, rating FROM movie_sql;
-
-SELECT * FROM movie_sql WHERE genre = 'SF';
-```
-
-**실행 결과**
-
-![step2 make table.png](captures/step2%20make%20table.png)
-
-![step2 insert.png](captures/step2%20insert.png)
-
-![step2 update.png](captures/step2%20update.png)
-
-![step2 select title rating.png](captures/step2%20select%20title%20rating.png)
-
-![step4 select sf movie.png](captures/step4%20select%20sf%20movie.png)
-
-![step2 delete.png](captures/step2%20delete.png)
---- 
-
-## Spring Data JPA 구현
-
-### Entity 및 JpaRepository 설명
-
-Entity는 Java 객체와 데이터베이스 테이블을 매핑하는 역할
-
-JpaRepository는 Entity를 데이터베이스에 저장하거나 조회·수정·삭제할 수 있도록 기본 CRUD 메서드를 제공하는 인터페이스
-
-### JPA Annotation
-
-- @Entity : JPA가 관리하는 Entity 클래스로 지정
-- @Table : Entity와 연결할 DB 테이블 이름 지정
-- @Id : 기본 키(Primary Key) 지정
-- @GeneratedValue :    기본 키 자동 생성 방식 지정
-- @Column :    컬럼의 이름과 제약조건 설정
-- @NotBlank    : null, 빈 문자열, 공백만 있는 문자열을 허용하지 않음
-- @NotNull : null을 허용하지 않음
-- @Size(max = 100) : 문자열 길이를 최대 100자로 제한
-- @PositiveOrZero : 숫자가 0 이상인지 검증
-
-### REST API Endpoint 목록 및 요청·응답 JSON
-
-| Method | Endpoint         |
-|--------|------------------|
-| POST   | /api/movies      |
-| GET    | /api/movies      |
-| GET    | /api/movies/{id} |
-| PUT    | /api/movies/{id} |
-| DELETE | /api/movies/{id} |
-
-- post 및 put
-  요청
-
-```json
-{
-  "title": "Interstellar",
-  "director": "Nolan",
-  "genre": "SF",
-  "rating": 9.3,
-  "releaseYear": 2014
-}
-```
-
-응답
-
-```json
-{
-  "id": 3,
-  "title": "Interstellar",
-  "director": "Nolan",
-  "genre": "SF",
-  "rating": 9.3,
-  "releaseYear": 2014
-}
-```
-
-나머지는 url를 통해
-
-### JPA Entity와 MariaDB Table 비교
-
-| 구분        | JPA Entity              | MariaDB Table          |
-|-----------|-------------------------|------------------------|
-| 형태        | Java 클래스| DB 테이블               |
-| 역할        | 객체 형태의 데이터 표현 | 실제 데이터 저장       |
-| 기본 키	   | @Id	                    | PRIMARY KEY            |
-| 자동 ID 생성  | @GeneratedValue	        | AUTO_INCREMENT         |
-| 컬럼 설정     | @Column	                | VARCHAR, INT 등         |
-| 구조 변경     | Java 코드 및 Annotation 수정 | DDL 실행 또는 Hibernate 반영 |
-| 데이터 접근    | Java 객체와 Repository     | SQL                    |       
-
----
-
-## JPA vs SQL
-| 메서드 | 기능 | SQL 명령어 | 실제 실행 결과 |
-|---|---|---|---|
-| `save()` | 영화 등록 | INSERT | [작성] |
-| `findAll()` | 전체 영화 조회 | SELECT | [작성] |
-| `findById()` | 특정 영화 조회 | SELECT WHERE | [작성] |
-| `save()` | 기존 영화 수정 | UPDATE | [작성] |
-| `deleteById()` | 특정 영화 삭제 | DELETE | [작성] |
-
-### Hibernate SQL 확인
-```text
-Hibernate: 
-    select
-        m1_0.id,
-        m1_0.director,
-        m1_0.genre,
-        m1_0.rating,
-        m1_0.release_year,
-        m1_0.title 
-    from
-        movies m1_0
-Hibernate: 
-    insert 
-    into
-        movies
-        (director, genre, rating, release_year, title) 
-    values
-        (?, ?, ?, ?, ?)
-Hibernate: 
-    select
-        m1_0.id,
-        m1_0.director,
-        m1_0.genre,
-        m1_0.rating,
-        m1_0.release_year,
-        m1_0.title 
-    from
-        movies m1_0 
-    where
-        m1_0.id=?
-Hibernate: 
-    select
-        m1_0.id,
-        m1_0.director,
-        m1_0.genre,
-        m1_0.rating,
-        m1_0.release_year,
-        m1_0.title 
-    from
-        movies m1_0
-Hibernate: 
-    select
-        m1_0.id,
-        m1_0.director,
-        m1_0.genre,
-        m1_0.rating,
-        m1_0.release_year,
-        m1_0.title 
-    from
-        movies m1_0 
-    where
-        m1_0.id=?
-Hibernate: 
-    select
-        m1_0.id,
-        m1_0.director,
-        m1_0.genre,
-        m1_0.rating,
-        m1_0.release_year,
-        m1_0.title 
-    from
-        movies m1_0 
-    where
-        m1_0.id=?
-Hibernate: 
-    update
-        movies 
-    set
-        director=?,
-        genre=?,
-        rating=?,
-        release_year=?,
-        title=? 
-    where
-        id=?
-Hibernate: 
-    select
-        count(*) 
-    from
-        movies m1_0 
-    where
-        m1_0.id=?
-Hibernate: 
-    select
-        m1_0.id,
-        m1_0.director,
-        m1_0.genre,
-        m1_0.rating,
-        m1_0.release_year,
-        m1_0.title 
-    from
-        movies m1_0 
-    where
-        m1_0.id=?
-Hibernate: 
-    delete 
-    from
-        movies 
-    where
-        id=?
-Hibernate: 
-    select
-        m1_0.id,
-        m1_0.director,
-        m1_0.genre,
-        m1_0.rating,
-        m1_0.release_year,
-        m1_0.title 
-    from
-        movies m1_0
-Hibernate: 
-    select
-        m1_0.id,
-        m1_0.director,
-        m1_0.genre,
-        m1_0.rating,
-        m1_0.release_year,
-        m1_0.title 
-    from
-        movies m1_0 
-    where
-        m1_0.id=?
-```
-
-## 배포 및 환경 설정
-
-### IntelliJ 및 Render 환경변수 설정 방법(변수명만 기록)
-
-- DB_URL     
-- DB_USERNAME    
-- DB_PASSWORD
-
-![render post.png](captures/render%20post.png)
-
-![render get.png](captures/render%20get.png)
-
-![render put.png](captures/render%20put.png)
-
-![render get id.png](captures/render%20get%20id.png)
-
-![render delete.png](captures/render%20delete.png)
-
-### MariaDB 데이터 저장 확인
-
-![mariadb result.png](captures/mariadb%20result.png)
-
-### 발생한 문제와 해결 방법
-
-없었습니다
-
-## Weekly Report
-
-###  Key Learning
-
-1. Spring Data JPA와 Hibernate의 역할
-  - `save()`, `findAll()`, `findById()`, `deleteById()` 등의 메서드를 통해 직접 sql 문을 작정하는 것이 아니라 Hibernate가 필요한 SQL을 생성후  실행
-
-2. Request DTO에서 검증 방법
-  - Request DTO에 `@NotBlank`, `@NotNull`, `@Size`, `@PositiveOrZero`을 통해 입력 검증 가능
-  - Controller에서 `@Valid`를 넣어 요청 데이터가 Service로 전달되기 전에 검증 진행
-
-3. Entity와 데이터베이스의 관계
-  - `@Entity`, `@Table`, `@Column` 를 이용하여 Java 객체와 MariaDB 테이블 생성 진행
-
-### Problem & Solution
-
-**Problem**
-
-MovieRequest DTO에서 `@NotBlank`, `@NotNull`, `@PositiveOrZero` 등의 Validation Annotation을 사용했을 때 에러 발생
-
-**Solution**
-
-처음에는 import 문제라고 생각했지만, build.gradle을 확인한 결과 Spring Boot Validation 의존성이 추가 필요
-
-### Code Review
-
-```java
-@DeleteMapping("/{id}")
-public ResponseEntity<Void> delete(@PathVariable Long id) {
-  ms.delete(id);
-  return ResponseEntity.noContent().build();
-}
-```
-기존 ResponseStatus 를 통해 상태 코드를 전송했다면 이번엔 다른 방식으로 표현 한다는 점에서 의의가 있다.
-
-
-AI usage
-- 코드 이해를 위한 주석 - 교수님 기본 코드 베이스
-- 기본적인 수정 사항 찾기
-- readme에서 관련 자료 table로 표현하기
+AI 사용 비율에 대한 자기 평가
+- 30%
