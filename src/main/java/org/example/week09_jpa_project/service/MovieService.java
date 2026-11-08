@@ -1,5 +1,6 @@
 package org.example.week09_jpa_project.service;
 
+import jakarta.transaction.Transactional;
 import org.example.week09_jpa_project.dto.MovieRequest;
 import org.example.week09_jpa_project.dto.MovieResponse;
 import org.example.week09_jpa_project.entity.Movie;
@@ -18,6 +19,12 @@ public class MovieService {
         this.repository = repository;
     }
 
+    /*
+    Q7) save()를 호출하면 새로운 데이터 등록과 기존 데이터 수정이 어떻게 처리되는가
+    Entity가 새로운 데이터인지 아닌지를 id 확인으로 진행함
+    새로운 데이터인 경우 - persist 진행
+    기존 데이터 - merge 진행
+     */
     public MovieResponse create(MovieRequest request) {
         // Movie 생성자를 통해 새로운 Movie 객체 생성하여 repo의 save로 보낸고 db에 저장 후 반환
         Movie saved = repository.save(new Movie(request));
@@ -43,12 +50,12 @@ public class MovieService {
         return MovieResponse.from(findEntity(id));
     }
 
+    // Dirty Checking을 이용한 수정 기능 구현
+    @Transactional
     public MovieResponse update(Long id, MovieRequest request) {
-        Movie movie = findEntity(id);
+        Movie movie = findEntity(id); // 해당 정보가 있는지 확인
         movie.update(request); // 메서드 통해 request를 Movie 객체로 변환
-        return MovieResponse.from(repository.save(movie)); // save()는 등록과 수정에 모두 사용
-        // Spring Data JPA는 Entity가 새로운 객체인지 판단해서 저장 방식을 결정
-        // Id = null 인 경우 insert 아닐 경우 merge = 수정 진 => save에 어떤 객체를 넣느냐에 따라 jpa 진행 달라짐
+        return MovieResponse.from(movie);
     }
 
     public void delete(Long id) {
@@ -65,3 +72,5 @@ public class MovieService {
     }
 
 }
+
+@Transactional과 Dirty Checking은 어떤 관계가 있는가?
