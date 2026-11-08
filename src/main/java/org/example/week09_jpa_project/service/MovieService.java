@@ -54,8 +54,10 @@ public class MovieService {
     // Dirty Checking을 이용한 수정 기능 구현
     @Transactional
     public MovieResponse update(Long id, MovieRequest request) {
-        Movie movie = findEntity(id); // 해당 정보가 있는지 확인
-        movie.update(request); // 메서드 통해 request를 Movie 객체로 변환
+        // Repository를 이용하여 기존 Entity 조회
+        Movie movie = findEntity(id);
+        // Entity의 필드 값을 변경
+        movie.update(request);
         return MovieResponse.from(movie);
     }
 
@@ -100,4 +102,12 @@ public class MovieService {
 
 }
 
-@Transactional과 Dirty Checking은 어떤 관계가 있는가?
+/* Q8 @Transactional과 Dirty Checking은 어떤 관계가 있는가?
+dirty checking 으로 db가 변경되기 위해서 entity가 영속 상태여야 한다.
+여기서 영속 상태란 JPA의 영속성 컨텍스트가 Entity 객체를 관리하고 있는 상태를 의미한다. 즉 JPA가 해당 객체를 기억하고 있어서 변경 사항을 추적할 수 있는 상태를 의미한다.
+보통 findById 인 경우 영속 상태가 되지만 findById가 종료되면 영속 상태도 종료된다. 그렇기에 수정 시 save를 통해 수정사항을 직접 넣어줘야 한다.
+
+@Transactional 을 붙일 경우 메서드 단위로 Transactional이 되는데 이때 findById 에서 진행된 영속 상태가 메서드가 끝날 때까지 유지된다.
+더 자세히는 트랜잭션의 범위를 메서드 전체로 확장하여 영속성 컨텍스트가 중간에 종료되지 않도록 하기 때문이다.
+그렇기에 movie.update(request); 해당 상황에서도 영속 상태이기 때문에 jpa 가 변화를 감지하고 메서드가 끝날때 이를 UPDATE SQL을 실행하여 DB에 반영하여 save 없이 수정된다.
+ */
