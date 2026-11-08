@@ -1,7 +1,12 @@
-package org.example.week09_jpa_project.entity;
+package org.example.week10_jpa_project.entity;
 
 import jakarta.persistence.*;
-import org.example.week09_jpa_project.dto.MovieRequest;
+import org.example.week10_jpa_project.dto.MovieRequest;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
+import java.time.LocalDateTime;
 
 // Java 객체와 데이터베이스 테이블을 연결하는 역할
 /*
@@ -17,6 +22,7 @@ entity class = table
 
 @Entity
 @Table(name = "movies")
+@EntityListeners(AuditingEntityListener.class)
 public class Movie {
 
     @Id // 이 필드가 테이블의 기본 키(Primary Key)임을 의미
@@ -44,6 +50,12 @@ public class Movie {
 
     @Column(nullable = false)
     private Integer releaseYear; // Double과 마찬가지 이유
+
+    @CreatedDate
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
 
     // JPA가 Entity 객체를 생성할 때 사용하는 기본 생성자
     // JPA에서는 매개변수가 없는 생성자가 필요함

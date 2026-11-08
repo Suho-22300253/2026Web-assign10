@@ -6,7 +6,7 @@ plugins {
 
 group = 'org.example'
 version = '0.0.1-SNAPSHOT'
-description = 'week09_jpa_project'
+description = 'week10_jpa_project'
 
 java {
     toolchain {

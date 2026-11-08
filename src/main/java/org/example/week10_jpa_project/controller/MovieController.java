@@ -1,9 +1,9 @@
-package org.example.week09_jpa_project.controller;
+package org.example.week10_jpa_project.controller;
 
 import jakarta.validation.Valid;
-import org.example.week09_jpa_project.dto.MovieRequest;
-import org.example.week09_jpa_project.dto.MovieResponse;
-import org.example.week09_jpa_project.service.MovieService;
+import org.example.week10_jpa_project.dto.MovieRequest;
+import org.example.week10_jpa_project.dto.MovieResponse;
+import org.example.week10_jpa_project.service.MovieService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 

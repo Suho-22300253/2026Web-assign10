@@ -1,6 +1,6 @@
-package org.example.week09_jpa_project.repository;
+package org.example.week10_jpa_project.repository;
 
-import org.example.week09_jpa_project.entity.Movie;
+import org.example.week10_jpa_project.entity.Movie;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
@@ -14,7 +14,7 @@ Q3. JpaRepository<Entity, Long>에서 두 타입은 각각 무엇을 의미
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     List<Movie> findByDirector(String director);
-    List<Movie> findByActorAndRatingGreaterThan(String actor, Integer rating);
+    List<Movie> findByDirectorAndRatingGreaterThan(String director, Integer rating);
     List<Movie> findByDirectorOrderByRatingDesc(String director);
 }
 

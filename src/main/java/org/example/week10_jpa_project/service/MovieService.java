@@ -1,10 +1,10 @@
-package org.example.week09_jpa_project.service;
+package org.example.week10_jpa_project.service;
 
 import jakarta.transaction.Transactional;
-import org.example.week09_jpa_project.dto.MovieRequest;
-import org.example.week09_jpa_project.dto.MovieResponse;
-import org.example.week09_jpa_project.entity.Movie;
-import org.example.week09_jpa_project.repository.MovieRepository;
+import org.example.week10_jpa_project.dto.MovieRequest;
+import org.example.week10_jpa_project.dto.MovieResponse;
+import org.example.week10_jpa_project.entity.Movie;
+import org.example.week10_jpa_project.repository.MovieRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -84,9 +84,9 @@ public class MovieService {
         return lists;
     }
 
-    public List<MovieResponse> findByActorAndRatingGreaterThan(String actor, Integer rating){
+    public List<MovieResponse> findByActorAndRatingGreaterThan(String director, Integer rating){
         List<MovieResponse> lists = new ArrayList<>();
-        for(Movie data : repository.findByActorAndRatingGreaterThan(actor, rating)){
+        for(Movie data : repository.findByDirectorAndRatingGreaterThan(director, rating)){
             lists.add(MovieResponse.from(data));
         }
         return lists;

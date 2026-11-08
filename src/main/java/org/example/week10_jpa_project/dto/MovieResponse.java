@@ -1,6 +1,6 @@
-package org.example.week09_jpa_project.dto;
+package org.example.week10_jpa_project.dto;
 
-import org.example.week09_jpa_project.entity.Movie;
+import org.example.week10_jpa_project.entity.Movie;
 
 public record MovieResponse(Long id, String title, String director, String genre, Double rating, int releaseYear) {
 
