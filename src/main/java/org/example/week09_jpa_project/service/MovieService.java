@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -69,6 +70,32 @@ public class MovieService {
         return repository.findById(id) // repository.findById(id)가 Optional<Movie>를 반환
                 .orElseThrow(() -> new ResponseStatusException(
                         HttpStatus.NOT_FOUND, "movie not found: " + id));
+    }
+
+
+    public List<MovieResponse> findByDirector(String director){
+
+        List<MovieResponse> lists = new ArrayList<>();
+        for(Movie data : repository.findByDirector(director)){
+            lists.add(MovieResponse.from(data));
+        }
+        return lists;
+    }
+
+    public List<MovieResponse> findByActorAndRatingGreaterThan(String actor, Integer rating){
+        List<MovieResponse> lists = new ArrayList<>();
+        for(Movie data : repository.findByActorAndRatingGreaterThan(actor, rating)){
+            lists.add(MovieResponse.from(data));
+        }
+        return lists;
+    }
+
+    public List<MovieResponse> findByDirectorOrderByRatingDesc(String director){
+        List<MovieResponse> lists = new ArrayList<>();
+        for(Movie data : repository.findByDirectorOrderByRatingDesc(director)){
+            lists.add(MovieResponse.from(data));
+        }
+        return lists;
     }
 
 }
