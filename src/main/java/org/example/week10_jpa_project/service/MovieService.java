@@ -84,7 +84,7 @@ public class MovieService {
         return lists;
     }
 
-    public List<MovieResponse> findByActorAndRatingGreaterThan(String director, Integer rating){
+    public List<MovieResponse> findByActorAndRatingGreaterThan(String director, Double rating){
         List<MovieResponse> lists = new ArrayList<>();
         for(Movie data : repository.findByDirectorAndRatingGreaterThan(director, rating)){
             lists.add(MovieResponse.from(data));

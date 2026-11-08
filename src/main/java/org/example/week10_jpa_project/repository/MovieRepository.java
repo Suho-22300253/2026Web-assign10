@@ -14,7 +14,7 @@ Q3. JpaRepository<Entity, Long>에서 두 타입은 각각 무엇을 의미
 public interface MovieRepository extends JpaRepository<Movie, Long> {
 
     List<Movie> findByDirector(String director);
-    List<Movie> findByDirectorAndRatingGreaterThan(String director, Integer rating);
+    List<Movie> findByDirectorAndRatingGreaterThan(String director, Double rating);
     List<Movie> findByDirectorOrderByRatingDesc(String director);
 }
 
