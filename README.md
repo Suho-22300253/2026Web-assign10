@@ -6,47 +6,13 @@
 
 crud 기능 수행
 
-### Entity 필드 구조
+### 주요 기능
+데이터 추가, 삭제, 수정, 조회 기능
 
-| Field       | Type    |
-|-------------|---------|
-| id          | Long    |
-| title       | String  |
-| director    | String  |
-| genre       | String  |
-| rating      | Double  |
-| releaseYear | Integer |
+이때 조회는 감독이름, 감독이름과 특정 관객수 이상, 그리고 특정 감독의 영화를 관객 수 내림차순으로 볼 수 있다.
 
-### 프로젝트 구조 및 개발 환경
-
-```text
-week09_jpa_project/
-├── src/main/java/org/example/week09_jpa_project/
-│   ├── controller/
-│   ├── service/
-│   ├── repository/
-│   ├── entity/
-│   └── dto/
-├── src/main/resources/
-│   └── application.properties
-├── build.gradle
-├── Dockerfile
-└── README.md
-```
-
-| 구분            | 기술                          |
-|---------------|-----------------------------|
-| Language      | Java 21                     |
-| Framework     | Spring Boot                 |
-| Build Tool    | Gradle                      |
-| Database      | MariaDB                     |
-| ORM           | Spring Data JPA / Hibernate |
-| Database Tool | DBeaver                     |
-| API Test      | Postman                     |
-| Deployment    | Render / Docker             |
-
-- **GitHub Repository:** https://github.com/2026-2-WebService/assign09-c01-22300253.git
-- **Render Deployment URL:** https://two026web-assign9.onrender.com
+- **GitHub Repository:** :
+- **Render Deployment URL:** 
 
 ---
 

@@ -39,7 +39,7 @@ public class MovieController {
         HTTP 상태 코드: 201 Created + HTTP Location 헤더: /api/movies/5
         .body(created) : HTTP 응답의 Body에 created(현 코드에서는 response 객체) 객체를 넣는 것
          */
-        return ResponseEntity.created(URI.create("/api/movie" + created.id())).body(created);
+        return ResponseEntity.created(URI.create("/api/movie/" + created.id())).body(created);
     }
 
     @GetMapping
@@ -50,6 +50,21 @@ public class MovieController {
     @GetMapping("/{id}")
     public MovieResponse findById(@PathVariable Long id) {
         return ms.findById(id);
+    }
+
+    @GetMapping("/findDirector/{director}")
+    public List<MovieResponse> findByDirector(@PathVariable String director) {
+        return ms.findByDirector(director);
+    }
+
+    @GetMapping("/findDirecRate/{director}/{rating}")
+    public List<MovieResponse> findByActorAndRatingGreaterThan(@PathVariable String director, @PathVariable Integer rating) {
+        return ms.findByActorAndRatingGreaterThan(director,rating);
+    }
+
+    @GetMapping("/findDirectorOrder/{director}")
+    public List<MovieResponse> findByDirectorOrderByRatingDesc(@PathVariable String director) {
+        return ms.findByDirectorOrderByRatingDesc(director);
     }
 
     @PutMapping("/{id}")
